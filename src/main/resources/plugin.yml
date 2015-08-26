@@ -1,5 +1,5 @@
 name: fCraftPsP
-main: io.github.stainlessblood.fCraftPsP.PsP
+main: io.github.stainlessblood.fCraftPsP.PsP.PsP
 version: 1.0
 
 commands:
