@@ -1,0 +1,8 @@
+name: fCraftPsP
+main: io.github.stainlessblood.fCraftPsP.PsP
+version: 1.0
+
+commands:
+   info:
+      description: Get basic information about yourself or another player.
+      usage: /<command>
