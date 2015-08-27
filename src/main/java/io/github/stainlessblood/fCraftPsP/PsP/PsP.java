@@ -75,7 +75,7 @@ public final class PsP extends JavaPlugin {
 			
 			PlayerData pData;
 			try {
-				pData = playerMap.get(target);
+				pData = getBestMatch(target);
 				
 				// If the target player is not found in the map of available player info return an error message
 				if(pData == null) {
@@ -91,9 +91,8 @@ public final class PsP extends JavaPlugin {
 			sender.sendMessage(ChatColor.YELLOW + "Available info for " + ChatColor.WHITE + pData.getDisplayName());
 			sender.sendMessage(ChatColor.YELLOW + addSeparator());
 			sender.sendMessage(pData.getDisplayName() + ChatColor.YELLOW + " was last seen on - " + ChatColor.GOLD + pData.getSeen());
-			sender.sendMessage(pData.getDisplayName() + ChatColor.YELLOW + " first logged in on " + ChatColor.GOLD + pData.getLogin());
+			sender.sendMessage(ChatColor.YELLOW + "User has logged in " + ChatColor.GREEN + pData.getLogCount() + ChatColor.YELLOW + " times since joining; " + ChatColor.GOLD + pData.getLogin());
 			sender.sendMessage(ChatColor.YELLOW + "User has placed " + ChatColor.GREEN + pData.getPlaced() + ChatColor.YELLOW + " blocks, and destoryed " + ChatColor.RED + pData.getBroke() + ChatColor.YELLOW + " blocks.");
-			sender.sendMessage(ChatColor.YELLOW + "User has logged in " + ChatColor.GREEN + pData.getLogCount() + ChatColor.YELLOW + " times since joining.");
 			sender.sendMessage(ChatColor.YELLOW + "Last IP - " + ChatColor.RED + pData.getIp());
 			
 			// Get users with the same IP, check the map for matching IP's
@@ -156,6 +155,21 @@ public final class PsP extends JavaPlugin {
 		}
 	}
 
+
+	private PlayerData getBestMatch(Object target) {
+		PlayerData pData = playerMap.get(target);
+		
+		if(pData == null) {
+			for(Entry<String, PlayerData> entry : playerMap.entrySet()) {
+				boolean match = entry.getKey().equalsIgnoreCase((String) target);
+				
+				if(match)
+					pData = entry.getValue();
+			}
+		}
+		return pData;
+	}
+	
 	/**
 	 * A convenience method for a string of hyphens that is the length of the chat box minus 2 characters
 	 * @return String - A string of '-' characters with length of 50 
