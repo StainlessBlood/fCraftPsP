@@ -1,7 +1,4 @@
-package io.github.stainlessblood.fCraftPsP.listeners;
-
-import io.github.stainlessblood.fCraftPsP.PsP.PlayerData;
-import io.github.stainlessblood.fCraftPsP.PsP.PsP;
+package com.fCraft.PsP.listeners;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,6 +7,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+
+import com.fCraft.PsP.PlayerData;
+import com.fCraft.PsP.PsP;
 
 public class BlockListener implements Listener {
 	
@@ -27,7 +27,7 @@ public class BlockListener implements Listener {
 		// Get player data object and change the blocks placed value
 		pUpdate = pMap.get(placer.getName());
 		if(evt.getBlock().getType().isBlock()) {
-			int cnt = pUpdate.getPlaced();
+			long cnt = pUpdate.getPlaced();
 			pUpdate.setPlaced(cnt + 1);
 			
 			// Update the value in the map for this player
@@ -43,8 +43,8 @@ public class BlockListener implements Listener {
 		// Get player data object and change the blocks broken value
 		pUpdate = pMap.get(breaker.getName());
 		if(evt.getBlock().getType().isBlock()) {
-			int cnt = pUpdate.getBroke();
-			pUpdate.setBroke(cnt + 1);
+			long cnt = pUpdate.getBroken();
+			pUpdate.setBroken(cnt + 1);
 			
 			// Update the value in the map for this player
 			pMap.put(breaker.getName(), pUpdate);

@@ -1,8 +1,37 @@
 name: fCraftPsP
-main: io.github.stainlessblood.fCraftPsP.PsP.PsP
-version: 1.0
+version: 1.2.7
+description: Player save Plus tracks, displays and saves certain info about players.
+
+author: StainlessBlood
+main: com.fCraft.PsP.PsP
 
 commands:
-   info:
-      description: Get basic information about yourself or another player.
-      usage: /<command>
+    pinfo:
+        description: Get or modify basic information about a player.
+        usage: |
+            /<command>
+            /<command> <user>
+            /<command> <user> set placed <amount>
+            /<command> <user> set broken <amount>
+            /<command> <user> set logins <amount>
+            /<command> <user> set played <minutes>
+            /<command> help [page]
+            /<command> reload
+
+permissions:
+    pinfo.*:
+        description: Gives you access to all commands
+        children:
+            pinfo.admin.*: true
+            pinfo.basic.info: true
+    pinfo.admin.*:
+        description: Gives you access to all admin commands
+        children:
+            pinfo.admin.manage: true
+            pinfo.admin.set: true
+    pinfo.admin.manage:
+        description: Allows you to reload the plugin configuration files
+    pinfo.admin.set:
+        description: Allows you to modify certain information about yourself or another player
+    pinfo.basic.info:
+        description: Allows you to see information about yourself or another player

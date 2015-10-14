@@ -1,0 +1,15 @@
+output:
+  Line1: BLANK
+  Line2: +YELLOW+Available info for +WHITE+DISPLAYNAME
+  Line3: +YELLOW+SEPARATOR
+  Line4: DISPLAYNAME+YELLOW+, last seen on - +GOLD+LASTSEEN
+  Line5: DISPLAYNAME+YELLOW+, first seen on - +GOLD+FIRSTSEEN+YELLOW+ under the name
+  Line6: +DISPLAYCOLOR+NAME+YELLOW+ and has logged on +GREEN+LOGINCOUNT+YELLOW+ times since.
+  Line7: +YELLOW+User's rank was set to CURRENTRANK +YELLOW+RANKEDON ago.
+  Line8: +YELLOW+User has spent +GREEN+MINUTES+YELLOW+ minutes playing on the server.
+  Line9: +YELLOW+User has placed +GREEN+PLACED+YELLOW+ blocks and broken +RED+BROKEN+YELLOW+ blocks.
+  Line10: +YELLOW+Last IP - +RED+IPADDRESS
+  Line11: +YELLOW+Other users with this IP - MATCHES
+  Line12: UNUSED
+  
+separator: "-"

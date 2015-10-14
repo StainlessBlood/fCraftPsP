@@ -1,7 +1,4 @@
-package io.github.stainlessblood.fCraftPsP.listeners;
-
-import io.github.stainlessblood.fCraftPsP.PsP.PlayerData;
-import io.github.stainlessblood.fCraftPsP.PsP.PsP;
+package com.fCraft.PsP.listeners;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -11,6 +8,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Location;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +18,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.fCraft.PsP.PlayerData;
+import com.fCraft.PsP.PlayerLocation;
+import com.fCraft.PsP.PsP;
+
 public final class JoinListener implements Listener {
+	
+	/** Map of online players, potential AFkers, for the server **/
+	ConcurrentHashMap<Player, PlayerLocation> onlinePlayers = PsP.getOnlinePlayers();
 	
 	/** Map of players for the server **/
 	ConcurrentHashMap<String, PlayerData> pMap = PsP.getPlayerMap();
@@ -30,11 +35,23 @@ public final class JoinListener implements Listener {
 		Player pJoin = event.getPlayer();
 		String pUUID = pJoin.getUniqueId().toString();
 
+		int logins = pJoin.getStatistic(Statistic.LEAVE_GAME);
+		logins = logins + 1;
+		
+		// Get the time of player's login
+		Date date = new Date();
+		long time = date.getTime();
+		
+		// Add player to currently online players to track for potential AFKing
+		Location loc = pJoin.getLocation();
+		
+		PlayerLocation pLoc = new PlayerLocation(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ());
+		onlinePlayers.put(pJoin, pLoc);
+		
 		// This player exists in our records, update loginCount, IP, and UUID
 		PlayerData pUpdate;
 		if((pUpdate = pMap.get(pJoin.getName())) != null) { 
-			int cnt = pJoin.getStatistic(Statistic.LEAVE_GAME);
-			pUpdate.setLogCount(cnt + 1);
+			pUpdate.updateOnLogin(logins, time);
 
 			// Check if player IP is the same, if not update it
 			if(!pUpdate.getIp().equalsIgnoreCase(pJoin.getAddress().getHostString()))
@@ -44,7 +61,7 @@ public final class JoinListener implements Listener {
 			if(!pUpdate.getUuid().equals(pJoin.getUniqueId()))
 				pUpdate.setUuid(pJoin.getUniqueId());
 			pMap.put(pJoin.getName(), pUpdate);
-
+			
 			return;
 		}
 		
@@ -64,24 +81,26 @@ public final class JoinListener implements Listener {
 			String pName = (String)object.get("name");
 			
 			if((pUpdate = pMap.get(pName)) != null) {
+				pUpdate.updateOnLogin(logins, time);
+				
 				pMap.remove(pName);
 				pMap.put(pJoin.getName(), pUpdate);
-
 				return;
 			}
 		}
 		
 		// Player is new to server, create new entry in the map
-		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-		pMap.put(pJoin.getName(), new PlayerData(pJoin.getName(), 
-												pJoin.getDisplayName(), 
-												pJoin.getUniqueId(), 
-												format.format(new Date(pJoin.getLastPlayed())),
-												pJoin.getAddress().getHostString(), 
-												format.format(new Date(pJoin.getFirstPlayed())), 
-												pJoin.getStatistic(Statistic.LEAVE_GAME),
-												0,
-												0)
-		);
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		pUpdate = new PlayerData(pJoin.getUniqueId(), 
+								pJoin.getName(), 
+								pJoin.getDisplayName(), 
+								format.format(new Date()),
+								format.format(new Date(pJoin.getFirstPlayed())), 
+								pJoin.getAddress().getHostString(), 
+								pJoin.getStatistic(Statistic.LEAVE_GAME)
+								);
+		pUpdate.updateOnLogin(logins, time);
+		
+		pMap.put(pJoin.getName(), pUpdate);
 	}
 }
