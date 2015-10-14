@@ -76,49 +76,7 @@ public final class PsP extends JavaPlugin {
 		// Add the listeners
 		registerEvents();
 		
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new AFKTask(), 1200L, 1200L);/*new Runnable() {
-			public void run() {
-				Location current, previous;
-				
-				int violation = 0;
-				for(Map.Entry<Player, PlayerLocation> entry : onlinePlayers.entrySet()) {
-					current = entry.getKey().getLocation();
-					previous = entry.getValue();
-					
-					// Check if the player has moved
-					if(current.getWorld() != previous.getWorld())
-						violation = 0;
-					else if(current.getX() != previous.getX())
-						violation = 0;
-					else if(current.getY() != previous.getY())
-						violation = 0;
-					else if(current.getZ() != previous.getZ())
-						violation = 0;
-					else
-						violation = 1;
-					
-					// Update violation count for player
-					PlayerData pData;
-					PlayerLocation pLoc;
-					if(violation == 0) {
-						pLoc = new PlayerLocation(current.getWorld(), current.getX(), current.getY(), current.getZ());
-						
-						pData = getPlayerMatches(entry.getKey().getName()).get(0);
-						pData.setViolations(pData.getViolations());
-					} else {
-						pLoc = entry.getValue();
-						pData = getPlayerMatches(entry.getKey().getName()).get(0);
-						
-						if(!pLoc.isActive())
-							pData.setViolations(pData.getViolations() + violation);
-						else
-							pLoc.setActive(false);
-					}
-					
-					onlinePlayers.put(entry.getKey(), pLoc);
-				}
-			}
-		}, 1200L, 1200L);*/
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new AFKTask(), 1200L, 1200L);
 	}
 
 	@Override
